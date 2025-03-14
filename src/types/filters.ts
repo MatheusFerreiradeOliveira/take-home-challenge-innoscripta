@@ -1,7 +1,8 @@
 export interface NewsFilters {
   keyword: string;
   category: string;
-  initialDate: string;
-  finalDate: string;
-  orderBy: "newest" | "oldest";
+  initialDate: Date | null;
+  finalDate: Date | null;
+  orderBy: "newest" | "relevance";
+  sources: string[];
 }

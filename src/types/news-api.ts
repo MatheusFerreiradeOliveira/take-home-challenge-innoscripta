@@ -1,4 +1,6 @@
-export type TArticleNewsAPI = {
+import { NYTArticlesAPIResponse } from "./nyt-api";
+
+export interface ArticleNewsAPI {
   source: {
     id: string | null;
     name: string;
@@ -10,4 +12,26 @@ export type TArticleNewsAPI = {
   urlToImage: string;
   publishedAt: string;
   content: string;
-};
+}
+
+export interface NewsAPISource {
+  id: string;
+  name: string;
+}
+
+export interface NewsAPISourceResponse {
+  status: string;
+  sources: NewsAPISource[];
+}
+
+export interface NewsAPIArticlesResponse {
+  status: string;
+  totalResults: number;
+  articles: ArticleNewsAPI[];
+}
+
+export function isNewsAPIResponse(
+  response: NYTArticlesAPIResponse | NewsAPIArticlesResponse
+): response is NewsAPIArticlesResponse {
+  return (response as NewsAPIArticlesResponse).articles !== undefined;
+}

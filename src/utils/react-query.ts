@@ -6,7 +6,6 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: (failureCount, error) => {
-        console.log("ERROOU", error);
         const canRetry =
           error.message.includes("timeout") ||
           // error.code === "ERR_BAD_RESPONSE" ||
@@ -23,8 +22,8 @@ export const queryClient = new QueryClient({
       retry: (failureCount, error) => {
         const canRetry =
           error.message.includes("timeout") ||
-          error.code === "ERR_BAD_RESPONSE" ||
-          error.code === "ERR_BAD_REQUEST" ||
+          // error.code === "ERR_BAD_RESPONSE" ||
+          // error.code === "ERR_BAD_REQUEST" ||
           error.message.includes("500");
         if (canRetry) {
           return failureCount < MAX_RETRIES;

@@ -79,3 +79,16 @@ export interface PersonNYTAPI {
   organization: string;
   rank: number;
 }
+
+export interface NYTArticlesAPIResponse {
+  status: string;
+  copyright: string;
+  response: {
+    docs: ArticleNYTAPI[];
+    meta: {
+      hits: number;
+      offset: number;
+      time: number;
+    };
+  };
+}
