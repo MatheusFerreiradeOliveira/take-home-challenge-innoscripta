@@ -1,4 +1,4 @@
-import { NYTArticlesAPIResponse } from "./nyt-api";
+import { ArticleNYTAPI, NYTArticlesAPIResponse } from "./nyt-api";
 
 export interface ArticleNewsAPI {
   source: {
@@ -28,6 +28,12 @@ export interface NewsAPIArticlesResponse {
   status: string;
   totalResults: number;
   articles: ArticleNewsAPI[];
+}
+
+export function isNewsAPIArticle(
+  response: ArticleNewsAPI | ArticleNYTAPI
+): response is ArticleNewsAPI {
+  return (response as ArticleNewsAPI).publishedAt !== undefined;
 }
 
 export function isNewsAPIResponse(

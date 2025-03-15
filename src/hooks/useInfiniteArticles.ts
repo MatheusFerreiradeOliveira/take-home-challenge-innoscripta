@@ -1,10 +1,10 @@
 import NewsAPIService from "@/services/news-api";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useFiltersData } from "./useFiltersData";
-import { usePage } from "./usePage";
 import { NewsFilters } from "@/types/filters";
 import NewYorkTimesService from "@/services/new-york-times-api";
 import { isNewsAPIResponse } from "@/types/news-api";
+import { convertToPublication } from "@/utils/functions";
 
 const fetchArticles = async ({
   page,
@@ -35,9 +35,13 @@ const fetchArticles = async ({
       const isNewsApiResponse = isNewsAPIResponse(response);
 
       if (isNewsApiResponse) {
-        return response.articles;
+        return response.articles.map((article) =>
+          convertToPublication(article)
+        );
       } else {
-        return response.response.docs;
+        return response.response.docs.map((article) =>
+          convertToPublication(article)
+        );
       }
     })
   );
@@ -46,13 +50,14 @@ const fetchArticles = async ({
 };
 
 export function useInfiniteArticles() {
-  const { page } = usePage();
   const { values } = useFiltersData();
 
   return useInfiniteQuery({
-    queryKey: ["infinite-articles", page, values],
-    queryFn: () => fetchArticles({ page, values }),
-    initialPageParam: page,
-    getNextPageParam: (_, allPages) => allPages.length + 1,
+    queryKey: ["infinite-articles", values],
+    queryFn: ({ pageParam = 1 }) => fetchArticles({ page: pageParam, values }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.length > 0 ? allPages.length + 1 : undefined;
+    },
   });
 }

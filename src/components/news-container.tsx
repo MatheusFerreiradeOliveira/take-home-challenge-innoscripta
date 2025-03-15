@@ -10,12 +10,38 @@ import {
   SelectValue,
 } from "./ui/select";
 import { useInfiniteArticles } from "@/hooks/useInfiniteArticles";
+import { Spinner } from "./ui/spinner";
+import NotFound from "@/app/not-found";
+import { useEffect, useRef } from "react";
 
 export default function NewsContainer() {
   const { values: filterValues, updateValues } = useFiltersData();
+  const loadMoreRef = useRef(null);
 
-  const { data } = useInfiniteArticles();
-  console.log("worked?", data);
+  const {
+    data: publications,
+    isPending,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteArticles();
+
+  useEffect(() => {
+    if (!loadMoreRef.current || !hasNextPage) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    observer.observe(loadMoreRef.current);
+
+    return () => observer.disconnect();
+  }, [hasNextPage, fetchNextPage]);
 
   return (
     <div className="relative w-full flex flex-col justify-center items-center py-10 overflow-y-scroll">
@@ -40,7 +66,26 @@ export default function NewsContainer() {
           </SelectContent>
         </Select>
       </div>
-      <Publication />
+      <div>
+        {isPending ? (
+          <Spinner />
+        ) : (
+          <div>
+            {(publications?.pages.flat() ?? [])?.map((publication) => (
+              <Publication key={publication.title} pub={publication} />
+            ))}
+          </div>
+        )}
+
+        {hasNextPage && (
+          <div
+            ref={loadMoreRef}
+            className="h-10 w-full text-center text-gray-500"
+          >
+            {isFetchingNextPage ? <Spinner /> : "Scroll down to load more"}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
