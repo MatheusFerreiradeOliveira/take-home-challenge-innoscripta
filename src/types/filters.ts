@@ -1,7 +1,7 @@
 export interface FiltersInterface {
   author?: string;
   keyword: string;
-  category: string;
+  categories: string[];
   orderBy: "newest" | "relevance";
   sections: string[];
   sources: string[];

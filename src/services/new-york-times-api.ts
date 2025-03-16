@@ -8,8 +8,21 @@ const NewYorkTimesService = {
     filters: FiltersInterface
   ): Promise<NYTArticlesAPIResponse> => {
     let searchParams = `&page=${page - 1}&rows=5`;
-    if (filters.author) searchParams += `&fq=byline:(${filters.author})`;
-    if (filters.category) searchParams += `&section_name=${filters.category}`;
+
+    if (filters.author || filters.categories.length) {
+      searchParams += "&fq=";
+      if (filters.author) {
+        searchParams += `byline:("${filters.author}")`;
+
+        if (filters.categories.length) searchParams += " AND ";
+      }
+      if (filters.categories.length) {
+        searchParams += `section_name:(${filters.categories
+          .map((category) => `"${category}"`)
+          .join(",")})`;
+      }
+    }
+
     if (filters.keyword) searchParams += `&q=${filters.keyword}`;
     if (filters.orderBy) {
       searchParams += `&sort=${filters.orderBy}`;

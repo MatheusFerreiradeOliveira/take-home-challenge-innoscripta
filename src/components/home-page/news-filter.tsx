@@ -9,6 +9,7 @@ import { MultiSelect } from "../ui/multi-select";
 import { Skeleton } from "../ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
+import { ALL_CATEGORIES_NYT } from "@/utils/functions";
 
 export default function NewsFilter() {
   const { values, updateValues } = useFilters();
@@ -52,10 +53,10 @@ export default function NewsFilter() {
 
       <div
         className={cn(
-          "flex flex-col w-[20%] bg-background gap-10 py-20 border-r shadow-sm",
-          `fixed top-0 left-0 h-full w-64 p-4 transition-transform transform z-40
-          ${isExpanded ? "pt-20 translate-x-0" : "-translate-x-full"}
-          md:translate-x-0 md:relative md:w-64`
+          "flex flex-col items-center w-64 lg:w-80 xl:w-96 bg-background gap-10 py-20 border-r shadow-sm",
+          `fixed top-0 left-0 h-full p-4 transition-transform transform z-40`,
+          isExpanded ? "pt-20 translate-x-0" : "-translate-x-full",
+          "md:translate-x-0 md:relative"
         )}
       >
         <div className="flex flex-col gap-2 w-full max-w-[300px]">
@@ -70,39 +71,23 @@ export default function NewsFilter() {
         </div>
         <div className="flex flex-col gap-2 w-full max-w-[300px]">
           <h1 className="text-lg text-foreground">Search by category</h1>
-          <Input
-            placeholder="sports, politics, etc."
-            onChange={useDebounce(
-              (e) => updateValues({ category: e.target.value }),
+          <MultiSelect
+            options={
+              ALL_CATEGORIES_NYT.map((category) => ({
+                label: category,
+                value: category,
+              })) || []
+            }
+            onValueChange={useDebounce(
+              (e) => updateValues({ categories: e }),
               500
             )}
+            defaultValue={values.categories}
+            placeholder="Select categories"
+            variant="inverted"
+            maxCount={3}
+            className="w-full"
           />
-          {/* <Select
-          value={values.category}
-          onValueChange={(e) =>
-            updateValues({ category: e === "all" ? "" : e })
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select a category" />
-          </SelectTrigger>
-          <SelectContent>
-            {values.category && (
-              <SelectItem
-                className="text-muted-foreground"
-                key="all"
-                value={"all"}
-              >
-                Clear
-              </SelectItem>
-            )}
-            {ALL_CATEGORIES.map((category) => (
-              <SelectItem key={category} value={category}>
-                {category}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select> */}
         </div>
 
         <div className="flex flex-col gap-2 w-full max-w-[300px]">

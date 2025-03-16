@@ -10,7 +10,7 @@ export const useFilters = create<TuseFilters>((set) => ({
   values: {
     author: "",
     keyword: "",
-    category: "",
+    categories: [],
     orderBy: "newest",
     sources: [],
     sections: [],

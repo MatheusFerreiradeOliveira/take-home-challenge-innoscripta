@@ -45,7 +45,7 @@ export default function Publication({ pub }: { pub: PublicationInterface }) {
         />
         <h2
           className={cn(
-            "px-2 w-full font-[800] z-10 absolute text-center bottom-2 bg-black/30",
+            "px-2 w-full font-[800] z-10 absolute text-center bottom-2 bg-black/50",
             pub.image ? "text-white" : "text-foreground",
             roboto.className
           )}

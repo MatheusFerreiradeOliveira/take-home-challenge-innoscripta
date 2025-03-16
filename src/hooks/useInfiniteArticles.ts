@@ -6,32 +6,39 @@ import NewYorkTimesService from "@/services/new-york-times-api";
 import { isNewsAPIResponse } from "@/types/news-api";
 import { convertToPublication } from "@/utils/functions";
 
-const fetchArticles = async ({
+const fetchNews = async ({
   page,
   values,
 }: {
   page: number;
   values: FiltersInterface;
 }) => {
-  const apis = [
-    {
+  let requests = [];
+
+  console.log("srcs", values.sources);
+
+  // remove request if filtering by category, since NewsAPI can't filter by category
+  if (
+    !Boolean(values.categories.length) &&
+    values.sources.some((source) => source !== "the-new-york-times")
+  ) {
+    requests.push({
       name: "NewsAPI",
       func: NewsAPIService.getArticles,
-    },
-    // {
-    //   name: "TheGuardian",
-    //   func: TheGuardianService.getArticles,
-    // },
-    {
+    });
+  }
+
+  if (values.sources.includes("the-new-york-times")) {
+    requests.push({
       name: "NewYorkTimes",
       func: NewYorkTimesService.getArticles,
-    },
-  ];
+    });
+  }
 
   const responses = await Promise.all(
-    apis.map(async (api) => {
+    requests.map(async (request) => {
       try {
-        const response = await api.func(page, values);
+        const response = await request.func(page, values);
 
         const isNewsApiResponse = isNewsAPIResponse(response);
 
@@ -58,7 +65,7 @@ export function useInfiniteArticles() {
 
   return useInfiniteQuery({
     queryKey: ["infinite-articles", values],
-    queryFn: ({ pageParam = 1 }) => fetchArticles({ page: pageParam, values }),
+    queryFn: ({ pageParam = 1 }) => fetchNews({ page: pageParam, values }),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.length > 0 ? allPages.length + 1 : undefined;

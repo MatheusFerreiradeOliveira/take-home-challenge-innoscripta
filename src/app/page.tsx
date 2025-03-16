@@ -1,5 +1,5 @@
-import NewsContainer from "@/components/news-page/news-container";
-import NewsFilter from "@/components/news-page/news-filter";
+import NewsContainer from "@/components/home-page/news-container";
+import NewsFilter from "@/components/home-page/news-filter";
 
 export default function Home() {
   return (

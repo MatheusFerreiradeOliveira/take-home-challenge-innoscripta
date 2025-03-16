@@ -14,7 +14,6 @@ const NewsAPIService = {
     let searchParams = `&page=${page}&pageSize=5&sources=${filters.sources.join(
       ","
     )}&language=en`;
-    if (filters.category) searchParams += `&category=${filters.category}`;
     if (filters.keyword) searchParams += `&q=${filters.keyword}`;
     if (filters.orderBy) {
       if (filters.orderBy === "newest") {

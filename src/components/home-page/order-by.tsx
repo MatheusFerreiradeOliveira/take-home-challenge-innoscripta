@@ -1,12 +1,12 @@
 import { FiltersInterface } from "@/types/filters";
-import { Label } from "./ui/label";
+import { Label } from "../ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "../ui/select";
 
 export default function OrderBy({
   value,

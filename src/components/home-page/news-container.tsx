@@ -1,14 +1,6 @@
 "use client";
 import { useFilters } from "@/hooks/useFilters";
 import Publication from "./publication";
-import { Label } from "../ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 import { useInfiniteArticles } from "@/hooks/useInfiniteArticles";
 import { Spinner } from "../ui/spinner";
 import { useEffect, useRef } from "react";
@@ -44,13 +36,13 @@ export default function NewsContainer() {
   }, [hasNextPage, fetchNextPage]);
 
   return (
-    <div className="py-10 relative w-full flex flex-col overflow-y-scroll">
+    <div className="py-10 relative w-full flex flex-col overflow-y-scroll pr-0 md:pr-10 lg:pr-40">
       <OrderBy value={filterValues.orderBy} updateValues={updateValues} />
-      <div className="max-h-screen w-full">
+      <div className="max-h-screen w-full px-4">
         {isPending ? (
           <Spinner className="mt-10" />
         ) : (
-          <div className="w-full flex flex-col gap-4 items-center mr-[250px]">
+          <div className="w-full flex flex-col gap-4 items-center">
             {(publications?.pages.flat() ?? [])?.map((publication) => (
               <Publication key={publication.title} pub={publication} />
             ))}
