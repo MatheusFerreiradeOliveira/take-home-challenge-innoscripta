@@ -1,6 +1,7 @@
 import { APIErrorInterface } from "@/types/error";
 import { FiltersInterface } from "@/types/filters";
 import { NYTArticlesAPIResponse } from "@/types/nyt-api";
+import dayjs from "dayjs";
 
 const NewYorkTimesService = {
   getArticles: async (
@@ -28,10 +29,16 @@ const NewYorkTimesService = {
       searchParams += `&sort=${filters.orderBy}`;
     }
     if (filters.initialDate) {
-      searchParams += `&begin_date=${filters.initialDate}`;
+      const formattedDate = dayjs(filters.initialDate)
+        .format("YYYY/MM/DD")
+        .replaceAll("/", "");
+      searchParams += `&begin_date=${formattedDate}`;
     }
     if (filters.finalDate) {
-      searchParams += `&end_date=${filters.finalDate}`;
+      const formattedDate = dayjs(filters.finalDate)
+        .format("YYYY/MM/DD")
+        .replaceAll("/", "");
+      searchParams += `&end_date=${formattedDate}`;
     }
 
     const response = await fetch(

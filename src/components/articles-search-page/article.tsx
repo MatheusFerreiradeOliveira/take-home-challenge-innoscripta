@@ -16,7 +16,7 @@ export default function Article({ data }: { data: ArticleInterface }) {
 
   return (
     <div className="border rounded-md flex flex-col shadow-sm gap-2 mb-4 w-full max-w-[1000px] p-4 relative">
-      <div className="flex justify-between">
+      <div className="flex justify-between gap-2">
         <div className="flex flex-col gap-1">
           <p className={cn(roboto.className, "font-[600] text-lg")}>
             {data.title}

@@ -111,22 +111,6 @@ export default function NewsFilter() {
             />
           )}
         </div>
-
-        {/* <div>
-        <DatePicker
-          value={values.initialDate}
-          setValue={(e) => handleChangeDate("initialDate", e)}
-          placeholder="Initial date"
-        />
-      </div>
-      <div>
-        <DatePicker
-          value={values.finalDate}
-          setValue={(e) => handleChangeDate("finalDate", e)}
-          placeholder="Final date"
-          initialValue={values.initialDate || undefined}
-        />
-      </div> */}
       </div>
       {isExpanded && (
         <div

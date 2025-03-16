@@ -1,6 +1,7 @@
 import { APIErrorInterface } from "@/types/error";
 import { FiltersInterface } from "@/types/filters";
 import { GAPISectionResponse, GAPIArticleesponse } from "@/types/guardian-api";
+import dayjs from "dayjs";
 
 const TheGuardianService = {
   getArticles: async (
@@ -12,9 +13,15 @@ const TheGuardianService = {
       searchParams += `&section=${filters.sections.join(",")}`;
     if (filters.keyword) searchParams += `&q="${filters.keyword}"`;
     if (filters.orderBy) searchParams += `&order-by=${filters.orderBy}`;
-    if (filters.initialDate)
-      searchParams += `&from-date=${filters.initialDate}`;
-    if (filters.finalDate) searchParams += `&to-date=${filters.finalDate}`;
+    if (filters.initialDate) {
+      const formattedDate = dayjs(filters.initialDate).format("YYYY-MM-DD");
+      searchParams += `&from-date=${formattedDate}`;
+    }
+
+    if (filters.finalDate) {
+      const formattedDate = dayjs(filters.finalDate).format("YYYY-MM-DD");
+      searchParams += `&to-date=${formattedDate}`;
+    }
 
     const response = await fetch(
       `https://content.guardianapis.com/search?api-key=${process.env.NEXT_PUBLIC_THE_GUARDIAN_API_KEY}${searchParams}`

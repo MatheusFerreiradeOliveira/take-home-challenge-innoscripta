@@ -65,8 +65,6 @@ const fetchArticles = async ({
 export function useInfiniteArticles() {
   const { values } = useFilters();
 
-  console.log("values", values);
-
   return useInfiniteQuery({
     queryKey: ["infinite-articles", values],
     queryFn: ({ pageParam = 1 }) => fetchArticles({ page: pageParam, values }),
