@@ -4,7 +4,8 @@ export interface FiltersInterface {
   categories: string[];
   orderBy: "newest" | "relevance";
   sections: string[];
-  sources: string[];
+  newsSources: string[];
+  articlesSources: string[];
   initialDate: Date | null;
   finalDate: Date | null;
 }

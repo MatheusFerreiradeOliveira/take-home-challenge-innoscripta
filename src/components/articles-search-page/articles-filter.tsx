@@ -9,15 +9,9 @@ import { useQuery } from "@tanstack/react-query";
 import { MultiSelect } from "../ui/multi-select";
 import { Skeleton } from "../ui/skeleton";
 import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
 import TheGuardianService from "@/services/the-guardian";
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarTrigger,
-} from "../ui/menubar";
+import { ALL_CATEGORIES_NYT } from "@/utils/functions";
+import { DatePicker } from "../ui/date-picker";
 import {
   Select,
   SelectContent,
@@ -29,21 +23,38 @@ import {
 export default function ArticlesFilter() {
   const { values, updateValues } = useFilters();
 
-  const { data: sections, isFetching: isFetchingSources } = useQuery({
+  const [concatenatedSecions, setConcatenatedSections] = useState<
+    { label: string; value: string }[]
+  >([]);
+
+  const { data, isFetching: isFetchingSources } = useQuery({
     queryKey: ["sections"],
     queryFn: async () => {
       const sections = await TheGuardianService.getSections();
 
-      console.log("sc", sections);
+      let allNYTCategories = ALL_CATEGORIES_NYT.map((category) => ({
+        label: category,
+        value: category,
+      }));
 
-      // sections.sections.push({
-      //   id: "the-new-york-times",
-      //   name: "The New York Times",
-      // });
+      let allSections = new Set(allNYTCategories);
 
-      // updateValues({ sections: sources.sources.map((source) => source.id) });
+      sections.response.results.map((result) => {
+        if (!ALL_CATEGORIES_NYT.includes(result.webTitle)) {
+          allSections.add({
+            label: result.webTitle,
+            value: result.id,
+          });
+        }
+      });
 
-      return sections;
+      setConcatenatedSections(
+        Array.from(allSections).sort((s1, s2) =>
+          s1.value.toLowerCase() < s2.value.toLowerCase() ? -1 : 1
+        )
+      );
+
+      return sections.response;
     },
     refetchOnWindowFocus: false,
   });
@@ -65,62 +76,48 @@ export default function ArticlesFilter() {
   );
 
   return (
-    <div className="relative z-50">
-      <div className={cn("flex flex-row w-full justify-end gap-10")}>
-        <div className="flex flex-col gap-2 w-full max-w-[300px]">
-          <Input
-            placeholder="Author name"
-            onChange={useDebounce(
-              (e) => updateValues({ author: e.target.value }),
+    <div className="relative z-50 w-full max-w-[800px]">
+      <div
+        className={cn(
+          "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 w-full"
+        )}
+      >
+        <div className="col-span-1 flex flex-col gap-2 w-full max-w-[300px]">
+          {/* <h1 className="text-lg text-foreground">Search by category</h1> */}
+
+          <MultiSelect
+            options={concatenatedSecions?.map((category) => category) || []}
+            onValueChange={useDebounce(
+              (e) => updateValues({ sections: e }),
               500
             )}
+            defaultValue={values.sections}
+            placeholder="Categories"
+            variant="inverted"
+            maxCount={3}
+            className="w-full"
           />
         </div>
-        <div className="flex flex-col gap-2 w-full max-w-[300px]">
-          {/* <h1 className="text-lg text-foreground">Search by category</h1> */}
-          <Select
-            value={values.category}
-            onValueChange={(e) =>
-              updateValues({ category: e === "all" ? "" : e })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select a category" />
-            </SelectTrigger>
-            <SelectContent>
-              {values.category && (
-                <SelectItem
-                  className="text-muted-foreground"
-                  key="all"
-                  value={"all"}
-                >
-                  Clear
-                </SelectItem>
-              )}
-              {/* {sections?.map((section) => (
-              <SelectItem key={section.} value={category}>
-                {category}
-              </SelectItem>
-            ))} */}
-            </SelectContent>
-          </Select>
-        </div>
 
-        <div className="flex flex-col gap-2 w-full max-w-[300px]">
-          <h1 className="text-lg text-foreground">Select your sources</h1>
+        <div className="col-span-1 flex flex-col gap-2 w-full max-w-[300px]">
+          {/* <h1 className="text-lg text-foreground">Select your sources</h1> */}
           {isFetchingSources ? (
             <Skeleton className="h-10" />
           ) : (
             <MultiSelect
-              options={
-                sources?.sources.map((source) => ({
-                  label: source.name,
-                  value: source.id,
-                })) || []
-              }
-              onValueChange={(e) => updateValues({ sources: e })}
-              defaultValue={values.sources}
-              placeholder="Select sources"
+              options={[
+                {
+                  label: "The Guardian",
+                  value: "the-guardian-api",
+                },
+                {
+                  label: "The New York Times",
+                  value: "the-new-york-times",
+                },
+              ]}
+              onValueChange={(e) => updateValues({ articlesSources: e })}
+              defaultValue={values.articlesSources}
+              placeholder="Sources"
               variant="inverted"
               maxCount={3}
               className="w-full"
@@ -128,41 +125,43 @@ export default function ArticlesFilter() {
           )}
         </div>
 
-        {/* <div>
-        <DatePicker
-          value={values.initialDate}
-          setValue={(e) => handleChangeDate("initialDate", e)}
-          placeholder="Initial date"
-        />
-      </div>
-      <div>
-        <DatePicker
-          value={values.finalDate}
-          setValue={(e) => handleChangeDate("finalDate", e)}
-          placeholder="Final date"
-          initialValue={values.initialDate || undefined}
-        />
-      </div> */}
-      </div>
+        <div className="col-span-1">
+          <DatePicker
+            value={values.initialDate}
+            setValue={(e) => handleChangeDate("initialDate", e)}
+            placeholder="From date"
+          />
+        </div>
+        <div className="col-span-1">
+          <DatePicker
+            value={values.finalDate}
+            setValue={(e) => handleChangeDate("finalDate", e)}
+            placeholder="To date"
+            initialValue={values.initialDate || undefined}
+          />
+        </div>
 
-      <Menubar className="flex md:hidden justify-center items-center">
-        <MenubarMenu>
-          <MenubarTrigger>
-            <Menu className="text-foreground px-0" size={24} />
-          </MenubarTrigger>
-          <MenubarContent className="flex flex-col gap-2 items-center mr-4">
-            <MenubarItem>
-              <Link href={"/"}>Home</Link>
-            </MenubarItem>
-            <MenubarItem>
-              <Link href={"/articles-search"}>Articles Search</Link>
-            </MenubarItem>
-            <MenubarItem>
-              <ModeToggle />
-            </MenubarItem>
-          </MenubarContent>
-        </MenubarMenu>
-      </Menubar>
+        {/* <div className="col-span-1">
+          <Select
+            value={values.orderBy}
+            onValueChange={(e: "newest" | "relevance") =>
+              updateValues({ orderBy: e })
+            }
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="order" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem key={"1"} value={"newest"}>
+                Newest
+              </SelectItem>
+              <SelectItem key={"2"} value={"relevance"}>
+                Relevance
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div> */}
+      </div>
     </div>
   );
 }

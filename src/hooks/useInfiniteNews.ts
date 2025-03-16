@@ -1,12 +1,12 @@
+import NewsAPIService from "@/services/news-api";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useFilters } from "./useFilters";
 import { FiltersInterface } from "@/types/filters";
 import NewYorkTimesService from "@/services/new-york-times-api";
-import { convertToArticle } from "@/utils/functions";
-import TheGuardianService from "@/services/the-guardian";
-import { isTheGuardianAPIResponse } from "@/types/guardian-api";
+import { isNewsAPIResponse } from "@/types/news-api";
+import { convertToPublication } from "@/utils/functions";
 
-const fetchArticles = async ({
+const fetchNews = async ({
   page,
   values,
 }: {
@@ -15,22 +15,18 @@ const fetchArticles = async ({
 }) => {
   let requests = [];
 
+  // remove request if filtering by category, since NewsAPI can't filter by category
   if (
-    values.keyword &&
-    (!values.articlesSources.length ||
-      values.articlesSources.some((source) => source === "the-guardian-api"))
+    !Boolean(values.categories.length) &&
+    values.newsSources.some((source) => source !== "the-new-york-times")
   ) {
     requests.push({
-      name: "TheGuardianAPI",
-      func: TheGuardianService.getArticles,
+      name: "NewsAPI",
+      func: NewsAPIService.getArticles,
     });
   }
 
-  if (
-    values.keyword &&
-    (!values.articlesSources.length ||
-      values.newsSources.includes("the-new-york-times"))
-  ) {
+  if (values.newsSources.includes("the-new-york-times")) {
     requests.push({
       name: "NewYorkTimes",
       func: NewYorkTimesService.getArticles,
@@ -42,15 +38,15 @@ const fetchArticles = async ({
       try {
         const response = await request.func(page, values);
 
-        const isGuardianApiResponse = isTheGuardianAPIResponse(response);
+        const isNewsApiResponse = isNewsAPIResponse(response);
 
-        if (isGuardianApiResponse) {
-          return response.response.results.map((article) =>
-            convertToArticle(article)
+        if (isNewsApiResponse) {
+          return response.articles.map((article) =>
+            convertToPublication(article)
           );
         } else {
           return response.response.docs.map((article) =>
-            convertToArticle(article)
+            convertToPublication(article)
           );
         }
       } catch (e) {
@@ -62,14 +58,12 @@ const fetchArticles = async ({
   return responses.flat();
 };
 
-export function useInfiniteArticles() {
+export function useInfiniteNews() {
   const { values } = useFilters();
 
-  console.log("values", values);
-
   return useInfiniteQuery({
-    queryKey: ["infinite-articles", values],
-    queryFn: ({ pageParam = 1 }) => fetchArticles({ page: pageParam, values }),
+    queryKey: ["infinite-news", values],
+    queryFn: ({ pageParam = 1 }) => fetchNews({ page: pageParam, values }),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.length > 0 ? allPages.length + 1 : undefined;

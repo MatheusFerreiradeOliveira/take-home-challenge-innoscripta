@@ -1,4 +1,9 @@
-import { PublicationInterface } from "@/types/globals";
+import { ArticleInterface, PublicationInterface } from "@/types/globals";
+import {
+  ArticleGAPI,
+  isTheGuardianAPIResponse,
+  isTheGuardianArticle,
+} from "@/types/guardian-api";
 import { ArticleNewsAPI, isNewsAPIArticle } from "@/types/news-api";
 import { ArticleNYTAPI } from "@/types/nyt-api";
 
@@ -109,4 +114,41 @@ export const convertToPublication = (item: ArticleNYTAPI | ArticleNewsAPI) => {
   }
 
   return newPub;
+};
+
+export const convertToArticle = (item: ArticleNYTAPI | ArticleGAPI) => {
+  let newArticle: PublicationInterface = {} as ArticleInterface;
+
+  if (isTheGuardianArticle(item)) {
+    newArticle = {
+      date: item.webPublicationDate,
+      image: "", // item.urlToImage,
+      mainText: "",
+      source: "The Guardian",
+      subject: "",
+      title: item.webTitle,
+      url: item.webUrl,
+      author: "",
+    };
+  } else {
+    let image = "";
+    const muldimedia = item.multimedia.find(
+      (multimedia) => multimedia.type === "image"
+    );
+
+    if (muldimedia) image = `https://static01.nyt.com/${muldimedia.url}`;
+
+    newArticle = {
+      date: item.pub_date,
+      image,
+      mainText: item.lead_paragraph,
+      source: item.source,
+      subject: item.abstract,
+      title: item.headline.main || item.headline.name,
+      url: item.web_url,
+      author: item.byline.original || "",
+    };
+  }
+
+  return newArticle;
 };

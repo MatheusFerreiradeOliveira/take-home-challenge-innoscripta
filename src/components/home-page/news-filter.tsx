@@ -25,7 +25,7 @@ export default function NewsFilter() {
         name: "The New York Times",
       });
 
-      updateValues({ sources: sources.sources.map((source) => source.id) });
+      updateValues({ newsSources: sources.sources.map((source) => source.id) });
 
       return sources;
     },
@@ -102,8 +102,8 @@ export default function NewsFilter() {
                   value: source.id,
                 })) || []
               }
-              onValueChange={(e) => updateValues({ sources: e })}
-              defaultValue={values.sources}
+              onValueChange={(e) => updateValues({ newsSources: e })}
+              defaultValue={values.newsSources}
               placeholder="Select sources"
               variant="inverted"
               maxCount={3}

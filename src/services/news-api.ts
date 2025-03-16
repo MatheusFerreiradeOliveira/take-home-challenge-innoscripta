@@ -11,7 +11,7 @@ const NewsAPIService = {
     page: number,
     filters: FiltersInterface
   ): Promise<NewsAPIArticlesResponse> => {
-    let searchParams = `&page=${page}&pageSize=5&sources=${filters.sources.join(
+    let searchParams = `&page=${page}&pageSize=5&sources=${filters.newsSources.join(
       ","
     )}&language=en`;
     if (filters.keyword) searchParams += `&q=${filters.keyword}`;

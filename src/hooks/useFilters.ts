@@ -12,7 +12,8 @@ export const useFilters = create<TuseFilters>((set) => ({
     keyword: "",
     categories: [],
     orderBy: "newest",
-    sources: [],
+    newsSources: [],
+    articlesSources: [], //"the-guardian-api", "the-new-york-times"
     sections: [],
     initialDate: null,
     finalDate: null,

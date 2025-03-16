@@ -1,3 +1,5 @@
+import { ArticleNYTAPI, NYTArticlesAPIResponse } from "./nyt-api";
+
 interface ResponseGAPI {
   status: string;
   userTier: string;
@@ -43,4 +45,24 @@ export interface EditionGAPI {
   webUrl: string;
   apiUrl: string;
   code: string;
+}
+
+export interface GAPISectionResponse {
+  response: ResponseGAPISection;
+}
+
+export interface GAPIArticleesponse {
+  response: ResponseGAPIContent;
+}
+
+export function isTheGuardianAPIResponse(
+  response: GAPIArticleesponse | NYTArticlesAPIResponse
+): response is GAPIArticleesponse {
+  return (response as GAPIArticleesponse).response.results !== undefined;
+}
+
+export function isTheGuardianArticle(
+  response: ArticleGAPI | ArticleNYTAPI
+): response is ArticleGAPI {
+  return (response as ArticleGAPI).id !== undefined;
 }

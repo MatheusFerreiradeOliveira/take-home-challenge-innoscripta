@@ -1,7 +1,7 @@
 "use client";
 import { useFilters } from "@/hooks/useFilters";
 import Publication from "./publication";
-import { useInfiniteArticles } from "@/hooks/useInfiniteArticles";
+import { useInfiniteNews } from "@/hooks/useInfiniteNews";
 import { Spinner } from "../ui/spinner";
 import { useEffect, useRef } from "react";
 import OrderBy from "./order-by";
@@ -16,7 +16,7 @@ export default function NewsContainer() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteArticles();
+  } = useInfiniteNews();
 
   useEffect(() => {
     if (!loadMoreRef.current || !hasNextPage) return;
