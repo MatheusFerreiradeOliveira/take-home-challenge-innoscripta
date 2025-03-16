@@ -6,6 +6,8 @@ COPY package.json package-lock.json ./
 
 RUN npm ci npm@latest --frozen-lockfile
 
+RUN npm install sharp
+
 # Rebuild the source code only when needed
 FROM node:21-alpine3.18 AS builder
 WORKDIR /app
