@@ -126,14 +126,16 @@ export const convertToPublication = (item: ArticleNYTAPI | ArticleNewsAPI) => {
       source: item.source.name,
       subject: item.description,
       title: item.title,
+      url: item.url,
+      author: item.author ? `By ${item.author}` : "",
     };
   } else {
-    let image = "https://static01.nyt.com/";
+    let image = "";
     const muldimedia = item.multimedia.find(
       (multimedia) => multimedia.type === "image"
     );
 
-    if (muldimedia) image += muldimedia.url;
+    if (muldimedia) image = `https://static01.nyt.com/${muldimedia.url}`;
 
     newPub = {
       date: item.pub_date,
@@ -141,7 +143,9 @@ export const convertToPublication = (item: ArticleNYTAPI | ArticleNewsAPI) => {
       mainText: item.lead_paragraph,
       source: item.source,
       subject: item.abstract,
-      title: item.headline.name,
+      title: item.headline.main || item.headline.name,
+      url: item.web_url,
+      author: item.byline.original || "",
     };
   }
 

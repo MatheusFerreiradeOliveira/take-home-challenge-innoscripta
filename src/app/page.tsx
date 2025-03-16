@@ -1,13 +1,10 @@
-import NewsContainer from "@/components/news-container";
-import NewsFilter from "@/components/news-filter";
-import Separator from "@/components/separator";
-import Image from "next/image";
+import NewsContainer from "@/components/news-page/news-container";
+import NewsFilter from "@/components/news-page/news-filter";
 
 export default function Home() {
   return (
-    <main className="defaultPageClasses flex-row justify-between px-4 md:px-10 lg:px-20">
+    <main className="defaultPageClasses flex-row justify-between">
       <NewsFilter />
-      {/* <Separator /> */}
       <section className="w-full">
         <NewsContainer />
       </section>

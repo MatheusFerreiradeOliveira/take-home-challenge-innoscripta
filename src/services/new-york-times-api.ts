@@ -1,12 +1,14 @@
-import { NewsFilters } from "@/types/filters";
+import { APIErrorInterface } from "@/types/error";
+import { FiltersInterface } from "@/types/filters";
 import { NYTArticlesAPIResponse } from "@/types/nyt-api";
 
 const NewYorkTimesService = {
   getArticles: async (
     page: number,
-    filters: NewsFilters
+    filters: FiltersInterface
   ): Promise<NYTArticlesAPIResponse> => {
     let searchParams = `&page=${page - 1}&rows=5`;
+    if (filters.author) searchParams += `&fq=byline:(${filters.author})`;
     if (filters.category) searchParams += `&section_name=${filters.category}`;
     if (filters.keyword) searchParams += `&q=${filters.keyword}`;
     if (filters.orderBy) {
@@ -24,10 +26,12 @@ const NewYorkTimesService = {
     );
 
     if (response.status === 429) {
-      throw new Error();
-      const retryAfter = response.headers.get("Retry-After");
-      const error = new APIError("Rate limit exceeded", response);
-      error.response = response; // Assign response to the error
+      let error: APIErrorInterface = {
+        response,
+        name: "API error",
+        message: "Rate limit exceeded, retrying...",
+      };
+
       throw error;
     }
 
@@ -36,10 +40,6 @@ const NewYorkTimesService = {
     }
 
     return await response.json();
-
-    // return fetch(
-    //   `https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${process.env.NEXT_PUBLIC_NYT_API_KEY}${searchParams}`
-    // ).then((response) => response.json());
   },
 };
 

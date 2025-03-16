@@ -14,7 +14,7 @@ export default function Footer() {
       <div className="">
         <b>© Innoscripta</b>
       </div>
-      <div className="flex flex-row items-center gap-10">
+      {/* <div className="flex flex-row items-center gap-10">
         <p className="text-sm ">Public APIs:</p>
         <div className="flex flex-row items-center gap-4">
           <div className="bg-blue-600 white tracking-tighter px-[5px] pt-[4px] pb-[4px]">
@@ -31,7 +31,7 @@ export default function Footer() {
             src={"/images/theguardian-op-logo.svg"}
           />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

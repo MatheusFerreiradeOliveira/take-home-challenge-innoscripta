@@ -5,4 +5,6 @@ export interface PublicationInterface {
   title: string;
   subject: string;
   mainText: string;
+  url: string;
+  author: string;
 }

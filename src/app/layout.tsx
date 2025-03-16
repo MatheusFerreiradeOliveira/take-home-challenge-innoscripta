@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={cn(inter.className, "flex flex-col w-full min-h-screen")}
+        className={cn(inter.className, "flex w-full flex-col min-h-screen")}
       >
         <ThemeProvider
           attribute={"class"}

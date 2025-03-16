@@ -66,7 +66,7 @@ const config: Config = {
         footerHeight: "6vh",
       },
       maxWidth: {
-        publication: "40vw",
+        publication: "450px",
       },
     },
   },

@@ -1,0 +1,26 @@
+import { FiltersInterface } from "@/types/filters";
+import { create } from "zustand";
+
+export type TuseFilters = {
+  values: FiltersInterface;
+  updateValues: (newValues: Partial<FiltersInterface>) => void;
+};
+
+export const useFilters = create<TuseFilters>((set) => ({
+  values: {
+    author: "",
+    keyword: "",
+    category: "",
+    orderBy: "newest",
+    sources: [],
+    sections: [],
+    initialDate: null,
+    finalDate: null,
+  },
+  updateValues: (newValues: Partial<FiltersInterface>) =>
+    set((state) => {
+      return {
+        values: { ...state.values, ...newValues },
+      };
+    }),
+}));

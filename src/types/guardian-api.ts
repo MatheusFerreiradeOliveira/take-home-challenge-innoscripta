@@ -1,4 +1,4 @@
-export interface ResponseGAPI {
+interface ResponseGAPI {
   status: string;
   userTier: string;
   total: number;
@@ -7,9 +7,14 @@ export interface ResponseGAPI {
   currentPage: number;
   pages: number;
   orderBy: string;
+}
+export interface ResponseGAPIContent extends ResponseGAPI {
   results: ArticleGAPI[];
 }
 
+export interface ResponseGAPISection extends ResponseGAPI {
+  results: SectionGAPI[];
+}
 export interface ArticleGAPI {
   id: string;
   type: string;
@@ -22,4 +27,20 @@ export interface ArticleGAPI {
   isHosted: boolean;
   pillarId: string;
   pillarName: string;
+}
+
+export interface SectionGAPI {
+  id: string;
+  webTitle: string;
+  webUrl: string;
+  apiUrl: string;
+  editions: EditionGAPI[];
+}
+
+export interface EditionGAPI {
+  id: string;
+  webTitle: string;
+  webUrl: string;
+  apiUrl: string;
+  code: string;
 }

@@ -1,7 +1,7 @@
 import NewsAPIService from "@/services/news-api";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useFiltersData } from "./useFiltersData";
-import { NewsFilters } from "@/types/filters";
+import { useFilters } from "./useFilters";
+import { FiltersInterface } from "@/types/filters";
 import NewYorkTimesService from "@/services/new-york-times-api";
 import { isNewsAPIResponse } from "@/types/news-api";
 import { convertToPublication } from "@/utils/functions";
@@ -11,7 +11,7 @@ const fetchArticles = async ({
   values,
 }: {
   page: number;
-  values: NewsFilters;
+  values: FiltersInterface;
 }) => {
   const apis = [
     {
@@ -30,18 +30,22 @@ const fetchArticles = async ({
 
   const responses = await Promise.all(
     apis.map(async (api) => {
-      const response = await api.func(page, values);
+      try {
+        const response = await api.func(page, values);
 
-      const isNewsApiResponse = isNewsAPIResponse(response);
+        const isNewsApiResponse = isNewsAPIResponse(response);
 
-      if (isNewsApiResponse) {
-        return response.articles.map((article) =>
-          convertToPublication(article)
-        );
-      } else {
-        return response.response.docs.map((article) =>
-          convertToPublication(article)
-        );
+        if (isNewsApiResponse) {
+          return response.articles.map((article) =>
+            convertToPublication(article)
+          );
+        } else {
+          return response.response.docs.map((article) =>
+            convertToPublication(article)
+          );
+        }
+      } catch (e) {
+        return [];
       }
     })
   );
@@ -50,7 +54,7 @@ const fetchArticles = async ({
 };
 
 export function useInfiniteArticles() {
-  const { values } = useFiltersData();
+  const { values } = useFilters();
 
   return useInfiniteQuery({
     queryKey: ["infinite-articles", values],

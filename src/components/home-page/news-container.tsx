@@ -1,21 +1,21 @@
 "use client";
-import { useFiltersData } from "@/hooks/useFiltersData";
+import { useFilters } from "@/hooks/useFilters";
 import Publication from "./publication";
-import { Label } from "./ui/label";
+import { Label } from "../ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "../ui/select";
 import { useInfiniteArticles } from "@/hooks/useInfiniteArticles";
-import { Spinner } from "./ui/spinner";
-import NotFound from "@/app/not-found";
+import { Spinner } from "../ui/spinner";
 import { useEffect, useRef } from "react";
+import OrderBy from "./order-by";
 
 export default function NewsContainer() {
-  const { values: filterValues, updateValues } = useFiltersData();
+  const { values: filterValues, updateValues } = useFilters();
   const loadMoreRef = useRef(null);
 
   const {
@@ -44,33 +44,13 @@ export default function NewsContainer() {
   }, [hasNextPage, fetchNextPage]);
 
   return (
-    <div className="relative w-full flex flex-col justify-center items-center py-10 overflow-y-scroll">
-      <div className="absolute right-2 top-2 flex flex-row items-center w-[250px]">
-        <Label className="w-full">Order news by:</Label>
-        <Select
-          value={filterValues.orderBy}
-          onValueChange={(e: "newest" | "relevance") =>
-            updateValues({ orderBy: e })
-          }
-        >
-          <SelectTrigger className="">
-            <SelectValue placeholder="order" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem key={"1"} value={"newest"}>
-              Newest
-            </SelectItem>
-            <SelectItem key={"2"} value={"relevance"}>
-              Relevance
-            </SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      <div>
+    <div className="py-10 relative w-full flex flex-col overflow-y-scroll">
+      <OrderBy value={filterValues.orderBy} updateValues={updateValues} />
+      <div className="max-h-screen w-full">
         {isPending ? (
-          <Spinner />
+          <Spinner className="mt-10" />
         ) : (
-          <div>
+          <div className="w-full flex flex-col gap-4 items-center mr-[250px]">
             {(publications?.pages.flat() ?? [])?.map((publication) => (
               <Publication key={publication.title} pub={publication} />
             ))}
@@ -82,7 +62,7 @@ export default function NewsContainer() {
             ref={loadMoreRef}
             className="h-10 w-full text-center text-gray-500"
           >
-            {isFetchingNextPage ? <Spinner /> : "Scroll down to load more"}
+            {isFetchingNextPage ? <Spinner /> : "Scroll down to load more news"}
           </div>
         )}
       </div>
