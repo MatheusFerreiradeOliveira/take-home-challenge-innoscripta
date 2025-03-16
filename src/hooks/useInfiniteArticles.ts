@@ -18,22 +18,22 @@ const fetchArticles = async ({
   if (
     values.keyword &&
     (!values.articlesSources.length ||
-      values.articlesSources.some((source) => source === "the-guardian-api"))
+      values.newsSources.includes("the-new-york-times"))
   ) {
     requests.push({
-      name: "TheGuardianAPI",
-      func: TheGuardianService.getArticles,
+      name: "NewYorkTimes",
+      func: NewYorkTimesService.getArticles,
     });
   }
 
   if (
     values.keyword &&
     (!values.articlesSources.length ||
-      values.newsSources.includes("the-new-york-times"))
+      values.articlesSources.some((source) => source === "the-guardian-api"))
   ) {
     requests.push({
-      name: "NewYorkTimes",
-      func: NewYorkTimesService.getArticles,
+      name: "TheGuardianAPI",
+      func: TheGuardianService.getArticles,
     });
   }
 
@@ -59,7 +59,7 @@ const fetchArticles = async ({
     })
   );
 
-  return responses.flat();
+  return responses.flat().sort((a1, a2) => (a1.title < a2.title ? -1 : 1));
 };
 
 export function useInfiniteArticles() {

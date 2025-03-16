@@ -76,7 +76,7 @@ export default function ArticlesFilter() {
   );
 
   return (
-    <div className="relative z-50 w-full max-w-[800px]">
+    <div className="relative z-50 w-full max-w-[1000px]">
       <div
         className={cn(
           "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 w-full"

@@ -104,9 +104,9 @@ export const convertToPublication = (item: ArticleNYTAPI | ArticleNewsAPI) => {
     newPub = {
       date: item.pub_date,
       image,
-      mainText: item.lead_paragraph,
+      mainText: item.abstract,
       source: item.source,
-      subject: item.abstract,
+      subject: item.lead_paragraph,
       title: item.headline.main || item.headline.name,
       url: item.web_url,
       author: item.byline.original || "",

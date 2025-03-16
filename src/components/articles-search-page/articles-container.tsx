@@ -33,7 +33,7 @@ export default function ArticlesContainer() {
   }, [hasNextPage, fetchNextPage]);
 
   return (
-    <div className="py-10 relative w-full flex flex-col">
+    <div className="pb-10 relative w-full flex flex-col">
       {/* <OrderBy value={filterValues.orderBy} updateValues={updateValues} /> */}
       <div className="max-h-screen w-full px-4">
         {isPending ? (

@@ -9,7 +9,7 @@ export default function ArticlesSearch() {
         <KeyworkInput />
         <ArticlesFilter />
       </section>
-      <section className="w-full flex flex-col justify-center items-center">
+      <section className="w-full flex flex-col justify-center items-center mt-10 overflow-y-scroll">
         <ArticlesContainer />
       </section>
     </main>
