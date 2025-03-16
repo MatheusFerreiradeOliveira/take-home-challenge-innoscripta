@@ -12,7 +12,7 @@ export const useFilters = create<TuseFilters>((set) => ({
     keyword: "",
     categories: [],
     orderBy: "newest",
-    newsSources: [],
+    newsSources: ["the-new-york-times"],
     articlesSources: [], //"the-guardian-api", "the-new-york-times"
     sections: [],
     initialDate: null,
