@@ -18,7 +18,7 @@ const fetchArticles = async ({
   if (
     values.keyword &&
     (!values.articlesSources.length ||
-      values.newsSources.includes("the-new-york-times"))
+      values.articlesSources.includes("the-new-york-times"))
   ) {
     requests.push({
       name: "NewYorkTimes",

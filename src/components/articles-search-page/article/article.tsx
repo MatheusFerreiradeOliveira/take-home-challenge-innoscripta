@@ -2,7 +2,6 @@ import { cn } from "@/lib/utils";
 import { ArticleInterface } from "@/types/globals";
 import dayjs from "dayjs";
 import { Roboto } from "next/font/google";
-import Image from "next/image";
 import { useState } from "react";
 
 const roboto = Roboto({

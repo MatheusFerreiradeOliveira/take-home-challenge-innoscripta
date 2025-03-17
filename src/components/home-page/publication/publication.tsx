@@ -38,9 +38,7 @@ export default function Publication({ pub }: { pub: PublicationInterface }) {
           height={400}
           alt="Pub"
           src={pub.image || "/images/no-image.png"}
-          // src={
-          //   "https://www.irishtimes.com/resizer/v2/5Q6GGLLXWFA7DCEMVQLJ6XJUW4.jpg?smart=true&auth=99db1fb18a6bc9b3fbc5453efd5000eed4e4ca882867133f4e0334e5f9d77ff9&width=1200&height=630"
-          // }
+          priority={true}
           className="rounded-sm  object-cover max-h-[400px]"
         />
         <h2

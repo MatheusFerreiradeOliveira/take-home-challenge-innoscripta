@@ -1,4 +1,4 @@
-import ArticlesContainer from "@/components/articles-search-page/articles-container";
+import ArticlesContainer from "@/components/articles-search-page/articles-container/articles-container";
 import ArticlesFilter from "@/components/articles-search-page/articles-filter";
 import KeyworkInput from "@/components/articles-search-page/keyword-input";
 

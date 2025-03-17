@@ -1,8 +1,8 @@
 "use client";
 import { useInfiniteArticles } from "@/hooks/useInfiniteArticles";
 import { useEffect, useRef } from "react";
-import { Spinner } from "../ui/spinner";
-import Article from "./article";
+import { Spinner } from "@/components/ui/spinner";
+import Article from "../article/article";
 
 export default function ArticlesContainer() {
   const loadMoreRef = useRef(null);
@@ -37,7 +37,7 @@ export default function ArticlesContainer() {
       {/* <OrderBy value={filterValues.orderBy} updateValues={updateValues} /> */}
       <div className="max-h-screen w-full px-4">
         {isPending ? (
-          <Spinner className="mt-10" />
+          <Spinner testId="spinner" className="mt-10" />
         ) : (
           <div className="w-full flex flex-col gap-4 items-center">
             {(articles?.pages.flat() ?? [])?.map((article) => (

@@ -18,17 +18,19 @@ export function DatePicker({
   value,
   setValue,
   initialValue,
+  testId,
 }: {
   placeholder?: string;
   value: Date | null;
   setValue: (date?: Date) => void;
   initialValue?: Date;
+  testId?: string;
 }) {
   // const [date, setDate] = React.useState<Date>();
 
   return (
     <Popover>
-      <div className="relative">
+      <div className="relative" data-testid={testId || ""}>
         <PopoverTrigger asChild>
           <Button
             variant={"outline"}

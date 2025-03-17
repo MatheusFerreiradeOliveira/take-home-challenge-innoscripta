@@ -1,4 +1,4 @@
-import NewsContainer from "@/components/home-page/news-container";
+import NewsContainer from "@/components/home-page/news-container/news-container";
 import NewsFilter from "@/components/home-page/news-filter";
 
 export default function Home() {

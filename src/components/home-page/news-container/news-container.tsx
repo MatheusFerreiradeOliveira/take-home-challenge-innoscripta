@@ -1,10 +1,10 @@
 "use client";
 import { useFilters } from "@/hooks/useFilters";
-import Publication from "./publication";
+import Publication from "../publication/publication";
 import { useInfiniteNews } from "@/hooks/useInfiniteNews";
-import { Spinner } from "../ui/spinner";
+import { Spinner } from "../../ui/spinner";
 import { useEffect, useRef } from "react";
-import OrderBy from "./order-by";
+import OrderBy from "../order-by";
 
 export default function NewsContainer() {
   const { values: filterValues, updateValues } = useFilters();

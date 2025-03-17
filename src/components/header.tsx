@@ -22,6 +22,7 @@ export default function Header() {
       <Image
         width={200}
         height={200}
+        priority={true}
         alt="Innoscripta"
         src={theme === "light" ? "/images/logo.png" : "/images/logo-white.png"}
       />

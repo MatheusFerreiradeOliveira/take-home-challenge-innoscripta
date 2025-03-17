@@ -1,6 +1,5 @@
 "use client";
 import { useFilters } from "@/hooks/useFilters";
-import { Input } from "../ui/input";
 import useDebounce from "@/hooks/useDebounce";
 import { useCallback, useState } from "react";
 import dayjs from "dayjs";
@@ -12,13 +11,6 @@ import { cn } from "@/lib/utils";
 import TheGuardianService from "@/services/the-guardian";
 import { ALL_CATEGORIES_NYT } from "@/utils/functions";
 import { DatePicker } from "../ui/date-picker";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 
 export default function ArticlesFilter() {
   const { values, updateValues } = useFilters();
@@ -96,13 +88,14 @@ export default function ArticlesFilter() {
             variant="inverted"
             maxCount={3}
             className="w-full"
+            data-testid="categories-multiselect"
           />
         </div>
 
         <div className="col-span-1 flex flex-col gap-2 w-full max-w-[300px]">
           {/* <h1 className="text-lg text-foreground">Select your sources</h1> */}
           {isFetchingSources ? (
-            <Skeleton className="h-10" />
+            <Skeleton testId="skeleton-loader" className="h-10" />
           ) : (
             <MultiSelect
               options={[
@@ -121,6 +114,7 @@ export default function ArticlesFilter() {
               variant="inverted"
               maxCount={3}
               className="w-full"
+              data-testid="sources-multiselect"
             />
           )}
         </div>
@@ -130,6 +124,7 @@ export default function ArticlesFilter() {
             value={values.initialDate}
             setValue={(e) => handleChangeDate("initialDate", e)}
             placeholder="From date"
+            testId="fromDateInput"
           />
         </div>
         <div className="col-span-1">
@@ -138,6 +133,7 @@ export default function ArticlesFilter() {
             setValue={(e) => handleChangeDate("finalDate", e)}
             placeholder="To date"
             initialValue={values.initialDate || undefined}
+            testId="toDateInput"
           />
         </div>
 

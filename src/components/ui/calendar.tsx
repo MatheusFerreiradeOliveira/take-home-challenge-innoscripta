@@ -17,6 +17,7 @@ function Calendar({
 }: CalendarProps) {
   return (
     <DayPicker
+      data-testid="calendar-popup"
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
       classNames={{

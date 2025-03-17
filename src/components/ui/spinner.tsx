@@ -40,9 +40,13 @@ export function Spinner({
   show,
   children,
   className,
-}: SpinnerContentProps) {
+  testId,
+}: SpinnerContentProps & { testId?: string }) {
   return (
-    <span className={spinnerVariants({ show })}>
+    <span
+      data-testid={testId || "spinner"}
+      className={spinnerVariants({ show })}
+    >
       <Loader2 className={cn(loaderVariants({ size }), className)} />
       {children}
     </span>
