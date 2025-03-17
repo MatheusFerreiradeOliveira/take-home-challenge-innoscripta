@@ -7,13 +7,13 @@ import { cn } from "@/lib/utils";
 
 const notoSerif = Noto_Serif({
   subsets: ["latin"],
-  weight: ["300", "400", "700", "800"], // Choose the weights you need
+  weight: ["300", "400", "700", "800"],
   style: ["normal", "italic"],
 });
 
 const roboto = Roboto({
   subsets: ["latin"],
-  weight: ["300", "400", "700", "900"], // Choose the weights you need
+  weight: ["300", "400", "700", "900"],
   style: ["normal", "italic"],
 });
 
